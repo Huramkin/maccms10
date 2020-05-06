@@ -84,13 +84,17 @@ class Cache
             } elseif (empty($options)) {
                 $options = Config::get('cache');
             }
-
             self::$handler = self::connect($options);
         }
 
         return self::$handler;
     }
 
+    public static function reset_init($options)
+    {
+        self::$handler = self::connect($options);
+        return self::$handler;
+    }
     /**
      * 切换缓存类型 需要配置 cache.type 为 complex
      * @access public

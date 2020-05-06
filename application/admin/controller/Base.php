@@ -101,6 +101,8 @@ class Base extends All
         Dir::delDir(RUNTIME_PATH.'log/');
         Dir::delDir(RUNTIME_PATH.'temp/');
 
+        Cache::clear();
+
         return true;
     }
 

@@ -19,19 +19,7 @@ class Make extends Base
             return false;
         }
         $content    =   $this->label_fetch($templateFile);
-        if(substr($htmlfile,strlen($htmlfile)-1,1)=='/'){
-            $htmlfile .= 'index';
-        }
-        if(strpos($htmlfile,'.') ===false){
-            $htmlfile .= '.'. $GLOBALS['config']['path']['suffix'];
-        }
-        if(strpos($htmlfile,'?')!==false){
-            $htmlfile = substr($htmlfile,0,strpos($htmlfile,'?'));
-        }
-        $htmlfile   =   $htmlpath.$htmlfile;
-        if(MAC_PATH !='/'){
-            $htmlfile = str_replace('.'.MAC_PATH, './', $htmlfile);
-        }
+        $htmlfile = reset_html_filename($htmlfile);
         $dir   =  dirname($htmlfile);
         if(!is_dir($dir)){
             mkdir($dir,0777,true);
@@ -787,7 +775,7 @@ class Make extends Base
                     $this->label_maccms();
                     $info = $this->label_vod_detail($v, $GLOBALS['config']['view']['vod_detail']);
                     $link = mac_url_vod_detail($v);
-                    $this->buildHtml($link, '.', mac_tpl_fetch('vod', $info['vod_tpl'], 'detail'));
+                    $this->buildHtml($link, './', mac_tpl_fetch('vod', $info['vod_tpl'], 'detail'));
                     $this->echoLink('detail', $link, '', 0);
                 }
                 $_REQUEST['id'] = $v['vod_id'];

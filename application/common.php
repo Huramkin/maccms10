@@ -2238,3 +2238,28 @@ function mac_get_popedom_filter($group_type,$type_list=[])
     return implode(',',$cha_keys);
 }
 
+function reset_html_filename($htmlfile)
+{
+    $htmlpath = './';
+    if(substr($htmlfile,strlen($htmlfile)-1,1)=='/'){
+        $htmlfile .= 'index';
+    }
+
+    if(strpos($htmlfile,'.') ===false){
+        $htmlfile .= '.'. $GLOBALS['config']['path']['suffix'];
+    }
+
+    if(strpos($htmlfile,'?')!==false){
+        $htmlfile = substr($htmlfile,0,strpos($htmlfile,'?'));
+    }
+    $htmlfile   =   $htmlpath.$htmlfile;
+    $htmlfile = str_replace('//','/', $htmlfile);
+
+    if(MAC_PATH !='/'){
+        $htmlfile = str_replace('.'.MAC_PATH, './', $htmlfile);
+    }
+
+    $htmlfile = str_replace('//','/', $htmlfile);
+    return $htmlfile;
+}
+

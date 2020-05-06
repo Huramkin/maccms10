@@ -29,6 +29,25 @@
         <div class="">
             {include file="public/paging"}
         </div>
+        <div class="">
+            {php}
+            $where=[];
+            $where['art_status'] = ['eq',1];
+            //上一篇数据
+            $where['art_id'] = ['lt',$obj['art_id']];
+            $pre_info = model('art')->infoData($where,'*',1);
+            //下一篇数据
+            $where['art_id'] = ['gt',$obj['art_id']];
+            $next_info = model('art')->infoData($where,'*',1);
+            {/php}
+
+            {if condition="$pre_info['code'] eq 1"}
+                <a href="{:mac_url_art_detail($pre_info['info'])}" >上一篇：{$pre_info['info']['art_name']}</a>
+            {/if}
+            {if condition="$next_info['code'] eq 1"}
+            <a href="{:mac_url_art_detail($next_info['info'])}" >下一篇：{$next_info['info']['art_name']}</a>
+            {/if}
+        </div>
     </div>
 
     <div class="vodlist_r">

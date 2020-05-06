@@ -32,7 +32,7 @@ class User extends Base
         return ['code' => 1, 'msg' => '数据列表', 'page' => $page, 'pagecount' => ceil($total / $limit), 'limit' => $limit, 'total' => $total, 'list' => $list];
     }
 
-    public function infoData($where, $field = '*')
+    public function infoData($where, $field='*')
     {
         if (empty($where) || !is_array($where)) {
             return ['code' => 1001, 'msg' => '参数错误'];

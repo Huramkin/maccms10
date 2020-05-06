@@ -263,12 +263,8 @@ class Role extends Base {
         $res = Cache::get($cach_name);
         if($GLOBALS['config']['app']['cache_core']==0 || empty($res)) {
             $res = $this->listData($where,$order,$page,$num,$start,'*',1,$totalshow);
-            $cache_time = $GLOBALS['config']['app']['cache_time'];
-            if(intval($cachetime)>0){
-                $cache_time = $cachetime;
-            }
             if($GLOBALS['config']['app']['cache_core']==1) {
-                Cache::set($cach_name, $res, $cache_time);
+                Cache::set($cach_name, $res, $GLOBALS['config']['app']['cache_time']);
             }
         }
         $res['pageurl'] = $pageurl;
@@ -281,8 +277,14 @@ class Role extends Base {
         if(empty($where) || !is_array($where)){
             return ['code'=>1001,'msg'=>'参数错误'];
         }
+        $data_cache = false;
         $key = 'role_detail_'.$where['role_id'][1].'_'.$where['role_en'][1];
-        $info = Cache::get($key);
+        if($where['role_id'][0]=='eq' || $where['role_en'][0]=='eq'){
+            $data_cache = true;
+        }
+        if($GLOBALS['config']['app']['cache_core']==1 && $data_cache) {
+            $info = Cache::get($key);
+        }
         if($GLOBALS['config']['app']['cache_core']==0 || $cache==0 || empty($info['role_id'])) {
             $info = $this->field($field)->where($where)->find();
             if (empty($info)) {
@@ -298,7 +300,7 @@ class Role extends Base {
                     $info['data'] = $vod_info['info'];
                 }
             }
-            if($GLOBALS['config']['app']['cache_core']==1) {
+            if($GLOBALS['config']['app']['cache_core']==1 && $data_cache && $cache==1) {
                 Cache::set($key, $info);
             }
         }

@@ -185,12 +185,8 @@ class Type extends Base {
         if($GLOBALS['config']['app']['cache_core']==0 || empty($res)) {
             $res = $this->listData($where,$order,$format,$mid,$num,$start,0);
             $res['list'] = array_values($res['list']);
-            $cache_time = $GLOBALS['config']['app']['cache_time'];
-            if(intval($cachetime)>0){
-                $cache_time = $cachetime;
-            }
             if($GLOBALS['config']['app']['cache_core']==1) {
-                Cache::set($cach_name, $res, $cache_time);
+                Cache::set($cach_name, $res, $GLOBALS['config']['app']['cache_time']);
             }
         }
 

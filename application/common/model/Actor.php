@@ -325,12 +325,8 @@ class Actor extends Base {
         $res = Cache::get($cach_name);
         if($GLOBALS['config']['app']['cache_core']==0 || empty($res)) {
             $res = $this->listData($where,$order,$page,$num,$start,'*',1,$totalshow);
-            $cache_time = $GLOBALS['config']['app']['cache_time'];
-            if(intval($cachetime)>0){
-                $cache_time = $cachetime;
-            }
             if($GLOBALS['config']['app']['cache_core']==1){
-                Cache::set($cach_name, $res, $cache_time);
+                Cache::set($cach_name, $res, $GLOBALS['config']['app']['cache_time']);
             }
         }
         $res['pageurl'] = $pageurl;
@@ -343,8 +339,14 @@ class Actor extends Base {
         if(empty($where) || !is_array($where)){
             return ['code'=>1001,'msg'=>'参数错误'];
         }
+        $data_cache = false;
         $key = 'actor_detail_'.$where['actor_id'][1].'_'.$where['actor_en'][1];
-        $info = Cache::get($key);
+        if($where['actor_id'][0]=='eq' || $where['actor_en'][0]=='eq'){
+            $data_cache = true;
+        }
+        if($GLOBALS['config']['app']['cache_core']==1 && $data_cache) {
+            $info = Cache::get($key);
+        }
         if($GLOBALS['config']['app']['cache_core']==0 || $cache==0 || empty($info['actor_id'])) {
             $info = $this->field($field)->where($where)->find();
             if (empty($info)) {
@@ -357,7 +359,7 @@ class Actor extends Base {
                 $info['type'] = $type_list[$info['type_id']];
                 $info['type_1'] = $type_list[$info['type']['type_pid']];
             }
-            if($GLOBALS['config']['app']['cache_core']==1) {
+            if($GLOBALS['config']['app']['cache_core']==1 && $data_cache && $cache==1) {
                 Cache::set($key, $info);
             }
         }
@@ -433,16 +435,26 @@ class Actor extends Base {
 
     public function delData($where)
     {
-        $res = $this->where($where)->delete();
-        if($res===false){
+        $list = $this->listData($where,'',1,9999);
+        if($list['code'] !==1){
             return ['code'=>1001,'msg'=>'删除失败：'.$this->getError() ];
         }
-        $list = $this->where($where)->select();
         $path = './';
-        foreach($list as $k=>$v){
+        foreach($list['list'] as $k=>$v){
             if(file_exists($path.$v['actor_pic'])){
                 unlink($path.$v['actor_pic']);
             }
+            if($GLOBALS['config']['view']['actor_detail'] ==2 ){
+                $lnk = mac_url_actor_detail($v);
+                $lnk = reset_html_filename($lnk);
+                if(file_exists($lnk)){
+                    unlink($lnk);
+                }
+            }
+        }
+        $res = $this->where($where)->delete();
+        if($res===false){
+            return ['code'=>1001,'msg'=>'删除失败：'.$this->getError() ];
         }
         return ['code'=>1,'msg'=>'删除成功'];
     }

@@ -448,12 +448,8 @@ class Vod extends Base {
         $res = Cache::get($cach_name);
         if($GLOBALS['config']['app']['cache_core']==0 || empty($res)) {
             $res = $this->listData($where, $order, $page, $num, $start,'*',1, $totalshow);
-            $cache_time = $GLOBALS['config']['app']['cache_time'];
-            if(intval($cachetime)>0){
-                $cache_time = $cachetime;
-            }
             if($GLOBALS['config']['app']['cache_core']==1) {
-                Cache::set($cach_name, $res, $cache_time);
+                Cache::set($cach_name, $res, $GLOBALS['config']['app']['cache_time']);
             }
         }
         $res['pageurl'] = $pageurl;
@@ -467,15 +463,16 @@ class Vod extends Base {
         if(empty($where) || !is_array($where)){
             return ['code'=>1001,'msg'=>'参数错误'];
         }
-
+        $data_cache = false;
         $key = 'vod_detail_'.$where['vod_id'][1].'_'.$where['vod_en'][1];
-
-        $info = Cache::get($key);
-
-
+        if($where['vod_id'][0]=='eq' || $where['vod_en'][0]=='eq'){
+            $data_cache = true;
+        }
+        if($GLOBALS['config']['app']['cache_core']==1 && $data_cache) {
+            $info = Cache::get($key);
+        }
         if($GLOBALS['config']['app']['cache_core']==0 || $cache==0 || empty($info['vod_id'])) {
             $info = $this->field($field)->where($where)->find();
-
             if (empty($info)) {
                 return ['code' => 1002, 'msg' => '获取数据失败'];
             }
@@ -502,7 +499,7 @@ class Vod extends Base {
                 $group_list = model('Group')->getCache('group_list');
                 $info['group'] = $group_list[$info['group_id']];
             }
-            if($GLOBALS['config']['app']['cache_core']==1) {
+            if($GLOBALS['config']['app']['cache_core']==1 && $data_cache && $cache==1) {
                 Cache::set($key, $info);
             }
         }
@@ -621,13 +618,12 @@ class Vod extends Base {
 
     public function delData($where)
     {
-        $res = $this->where($where)->delete();
-        if($res===false){
+        $list = $this->listData($where,'',1,9999);
+        if($list['code'] !==1){
             return ['code'=>1001,'msg'=>'删除失败：'.$this->getError() ];
         }
-        $list = $this->where($where)->select();
         $path = './';
-        foreach($list as $k=>$v){
+        foreach($list['list'] as $k=>$v){
             if(file_exists($path.$v['vod_pic'])){
                 unlink($path.$v['vod_pic']);
             }
@@ -637,6 +633,17 @@ class Vod extends Base {
             if(file_exists($path.$v['vod_pic_slide'])){
                 unlink($path.$v['vod_pic_slide']);
             }
+            if($GLOBALS['config']['view']['vod_detail'] ==2 ){
+                $lnk = mac_url_vod_detail($v);
+                $lnk = reset_html_filename($lnk);
+                if(file_exists($lnk)){
+                    unlink($lnk);
+                }
+            }
+        }
+        $res = $this->where($where)->delete();
+        if($res===false){
+            return ['code'=>1002,'msg'=>'删除失败：'.$this->getError() ];
         }
         return ['code'=>1,'msg'=>'删除成功'];
     }

@@ -1,6 +1,9 @@
 <?php
 namespace app\common\behavior;
 
+use think\Cache;
+use think\Exception;
+
 class Init
 {
     public function run(&$params)
@@ -26,13 +29,10 @@ class Init
             $config['site']['mob_html_dir'] = $config['site']['html_dir'];
             $config['site']['mob_ads_dir'] = $config['site']['ads_dir'];
         }
-
-
         $TMP_ISWAP = 0;
         $TMP_TEMPLATEDIR = $config['site']['template_dir'];
         $TMP_HTMLDIR = $config['site']['html_dir'];
         $TMP_ADSDIR = $config['site']['ads_dir'];
-
 
         if($isMobile){
             if( ($config['site']['mob_status']==2 ) || ($config['site']['mob_status']==1 && $_SERVER['HTTP_HOST']==$config['site']['site_wapurl']) || ($config['site']['mob_status']==1 && $isDomain) ) {
@@ -55,7 +55,6 @@ class Init
         define('MAC_PLAYER_SORT', $config['app']['player_sort'] );
         //define('ADDON_PATH', ROOT_PATH . 'addons' . DS);
 
-        $GLOBALS['config'] = $config;
         $GLOBALS['http_type'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
 
         if(ENTRANCE=='index'){
@@ -71,14 +70,16 @@ class Init
             }
         }
 
-
         config('url_route_on',$config['rewrite']['route_status']);
         if(empty($config['app']['pathinfo_depr'])){
             $config['app']['pathinfo_depr'] = '/';
         }
         config('pathinfo_depr',$config['app']['pathinfo_depr']);
 
-        config('cache.expire', intval($config['app']['cache_time']) );
+        if(intval($config['app']['cache_time'])<1){
+            $config['app']['cache_time'] = 60;
+        }
+        config('cache.expire', $config['app']['cache_time'] );
 
         if($config['app']['cache_type'] =='0' || $config['app']['cache_type'] =='file'){
             config('cache.type','file');
@@ -97,8 +98,11 @@ class Init
             config('cache.port',$config['app']['cache_port']);
             config('cache.username',$config['app']['cache_username']);
             config('cache.password',$config['app']['cache_password']);
+
+            $opt = config('cache');
+            Cache::reset_init($opt);
         }
 
-
+        $GLOBALS['config'] = $config;
     }
 }

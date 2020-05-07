@@ -29,8 +29,10 @@ class Collect extends Base
         $param['limit'] = '{limit}';
         $this->assign('param', $param);
 
-        $collect_break_vod = Cache::get('collect_break_vod');
-        $collect_break_art = Cache::get('collect_break_art');
+        $key = $GLOBALS['config']['app']['cache_flag']. '_'. 'collect_break_vod';
+        $collect_break_vod = Cache::get($key);
+        $key = $GLOBALS['config']['app']['cache_flag']. '_'. 'collect_break_art';
+        $collect_break_art = Cache::get($key);
 
         $this->assign('collect_break_vod', $collect_break_vod);
         $this->assign('collect_break_art', $collect_break_art);
@@ -86,8 +88,10 @@ class Collect extends Base
 
     public function union()
     {
-        $collect_break_vod = Cache::get('collect_break_vod');
-        $collect_break_art = Cache::get('collect_break_art');
+        $key = $GLOBALS['config']['app']['cache_flag']. '_'. 'collect_break_vod';
+        $collect_break_vod = Cache::get($key);
+        $key = $GLOBALS['config']['app']['cache_flag']. '_'. 'collect_break_art';
+        $collect_break_art = Cache::get($key);
 
         $this->assign('collect_break_vod', $collect_break_vod);
         $this->assign('collect_break_art', $collect_break_art);
@@ -99,8 +103,8 @@ class Collect extends Base
     public function load()
     {
         $param = input();
-
-        $collect_break = Cache::get('collect_break_' . $param['flag']);
+        $key = $GLOBALS['config']['app']['cache_flag']. '_'. 'collect_break_' . $param['flag'];
+        $collect_break = Cache::get($key);
         $url = $this->_ref;
         if (!empty($collect_break)) {
             echo '正在载入断点位置，请稍后。。。';
@@ -201,7 +205,8 @@ class Collect extends Base
     public function vod($param)
     {
         if($param['ac'] != 'list'){
-            Cache::set('collect_break_vod', url('collect/api').'?'. http_build_query($param) );
+            $key = $GLOBALS['config']['app']['cache_flag']. '_'.'collect_break_vod';
+            Cache::set($key, url('collect/api').'?'. http_build_query($param) );
         }
         $res = model('Collect')->vod($param);
         if($res['code']>1){
@@ -253,7 +258,8 @@ class Collect extends Base
     public function art($param)
     {
         if($param['ac'] != 'list'){
-            Cache::set('collect_break_art', url('collect/api').'?'. http_build_query($param) );
+            $key = $GLOBALS['config']['app']['cache_flag']. '_'.'collect_break_art';
+            Cache::set($key, url('collect/api').'?'. http_build_query($param) );
         }
         $res = model('Collect')->art($param);
         if($res['code']>1){
@@ -304,7 +310,8 @@ class Collect extends Base
     public function actor($param)
     {
         if($param['ac'] != 'list'){
-            Cache::set('collect_break_actor', url('collect/api').'?'. http_build_query($param) );
+            $key = $GLOBALS['config']['app']['cache_flag']. '_'.'collect_break_actor';
+            Cache::set($key, url('collect/api').'?'. http_build_query($param) );
         }
         $res = model('Collect')->actor($param);
         if($res['code']>1){
@@ -355,7 +362,8 @@ class Collect extends Base
     public function role($param)
     {
         if ($param['ac'] != 'list') {
-            Cache::set('collect_break_role', url('collect/api') . '?' . http_build_query($param));
+            $key = $GLOBALS['config']['app']['cache_flag']. '_'.'collect_break_role';
+            Cache::set($key, url('collect/api') . '?' . http_build_query($param));
         }
         $res = model('Collect')->role($param);
         if ($res['code'] > 1) {
@@ -406,7 +414,8 @@ class Collect extends Base
     public function website($param)
     {
         if ($param['ac'] != 'list') {
-            Cache::set('collect_break_website', url('collect/api') . '?' . http_build_query($param));
+            $key = $GLOBALS['config']['app']['cache_flag']. '_'.'collect_break_website';
+            Cache::set($key, url('collect/api') . '?' . http_build_query($param));
         }
         $res = model('Collect')->website($param);
         if ($res['code'] > 1) {

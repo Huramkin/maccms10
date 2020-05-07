@@ -464,7 +464,7 @@ class Vod extends Base {
             return ['code'=>1001,'msg'=>'参数错误'];
         }
         $data_cache = false;
-        $key = 'vod_detail_'.$where['vod_id'][1].'_'.$where['vod_en'][1];
+        $key = $GLOBALS['config']['app']['cache_flag']. '_'.'vod_detail_'.$where['vod_id'][1].'_'.$where['vod_en'][1];
         if($where['vod_id'][0]=='eq' || $where['vod_en'][0]=='eq'){
             $data_cache = true;
         }

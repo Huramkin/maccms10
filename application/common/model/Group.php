@@ -119,17 +119,18 @@ class Group extends Base {
     {
         $res = $this->listData([],'group_id asc');
         $list = $res['list'];
-        Cache::set('group_list',$list);
+        $key = $GLOBALS['config']['app']['cache_flag']. '_'.'group_list';
+        Cache::set($key,$list);
 
     }
 
     public function getCache($flag='group_list')
     {
-        $cache = Cache::get($flag);
+        $key = $GLOBALS['config']['app']['cache_flag']. '_'.$flag;
+        $cache = Cache::get($key);
         if(empty($cache)){
             $this->setCache();
-
-            $cache = Cache::get($flag);
+            $cache = Cache::get($key);
         }
         return $cache;
     }

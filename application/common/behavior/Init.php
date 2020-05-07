@@ -81,24 +81,18 @@ class Init
         }
         config('cache.expire', $config['app']['cache_time'] );
 
-        if($config['app']['cache_type'] =='0' || $config['app']['cache_type'] =='file'){
-            config('cache.type','file');
+
+        if(!in_array($config['app']['cache_type'],['file','memcache','memcached','redis'])){
+            $config['app']['cache_type'] = 'file';
         }
-        else{
-            if($config['app']['cache_type'] =='1'){
-                $config['app']['cache_type']  = 'memcache';
-            }
-            elseif($config['app']['cache_type'] =='2'){
-                $config['app']['cache_type']  = 'redis';
-            }
 
-            config('cache.type', $config['app']['cache_type']);
-            config('cache.timeout',1000);
-            config('cache.host',$config['app']['cache_host']);
-            config('cache.port',$config['app']['cache_port']);
-            config('cache.username',$config['app']['cache_username']);
-            config('cache.password',$config['app']['cache_password']);
-
+        config('cache.type', $config['app']['cache_type']);
+        config('cache.timeout',1000);
+        config('cache.host',$config['app']['cache_host']);
+        config('cache.port',$config['app']['cache_port']);
+        config('cache.username',$config['app']['cache_username']);
+        config('cache.password',$config['app']['cache_password']);
+        if($config['app']['cache_type'] != 'file'){
             $opt = config('cache');
             Cache::reset_init($opt);
         }

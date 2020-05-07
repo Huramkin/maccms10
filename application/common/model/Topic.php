@@ -264,7 +264,7 @@ class Topic extends Base {
             return ['code'=>1001,'msg'=>'参数错误'];
         }
         $data_cache = false;
-        $key = 'topic_detail_'.$where['topic_id'][1].'_'.$where['topic_en'][1];
+        $key = $GLOBALS['config']['app']['cache_flag']. '_'.'topic_detail_'.$where['topic_id'][1].'_'.$where['topic_en'][1];
         if($where['topic_id'][0]=='eq' || $where['topic_en'][0]=='eq'){
             $data_cache = true;
         }

@@ -313,18 +313,21 @@ class Type extends Base {
     {
         $res = $this->listData([],'type_id asc');
         $list = $res['list'];
-        Cache::set('type_list',$list);
+        $key = $GLOBALS['config']['app']['cache_flag']. '_'.'type_list';
+        Cache::set($key,$list);
 
         $type_tree = mac_list_to_tree($list,'type_id','type_pid');
-        Cache::set('type_tree',$type_tree);
+        $key = $GLOBALS['config']['app']['cache_flag']. '_'.'type_tree';
+        Cache::set($key,$type_tree);
     }
 
     public function getCache($flag='type_list')
     {
-        $cache = Cache::get($flag);
+        $key = $GLOBALS['config']['app']['cache_flag']. '_'.$flag;
+        $cache = Cache::get($key);
         if(empty($cache)){
             $this->setCache();
-            $cache = Cache::get($flag);
+            $cache = Cache::get($key);
         }
         return $cache;
     }

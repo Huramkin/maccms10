@@ -50,7 +50,7 @@ class Provide extends Base
         }
 
         $cache_time = intval($GLOBALS['config']['api']['vod']['cachetime']);
-        $cach_name = 'api_vod_'.md5(http_build_query($this->_param));
+        $cach_name = $GLOBALS['config']['app']['cache_flag']. '_'.'api_vod_'.md5(http_build_query($this->_param));
         $html = Cache::get($cach_name);
         if(empty($html) || $cache_time==0) {
             $where = [];
@@ -309,7 +309,7 @@ class Provide extends Base
         }
 
         $cache_time = intval($GLOBALS['config']['api']['art']['cachetime']);
-        $cach_name = 'api_art_'.md5(http_build_query($this->_param));
+        $cach_name = $GLOBALS['config']['app']['cache_flag']. '_'.'api_art_'.md5(http_build_query($this->_param));
         $html = Cache::get($cach_name);
         if(empty($html) || $cache_time==0) {
             $where = [];
@@ -433,7 +433,7 @@ class Provide extends Base
         }
 
         $cache_time = intval($GLOBALS['config']['api']['actor']['cachetime']);
-        $cach_name = 'api_actor_'.md5(http_build_query($this->_param));
+        $cach_name = $GLOBALS['config']['app']['cache_flag']. '_'.'api_actor_'.md5(http_build_query($this->_param));
         $html = Cache::get($cach_name);
         if(empty($html) || $cache_time==0) {
             $where = [];
@@ -557,7 +557,7 @@ class Provide extends Base
         }
 
         $cache_time = intval($GLOBALS['config']['api']['role']['cachetime']);
-        $cach_name = 'api_role_'.md5(http_build_query($this->_param));
+        $cach_name = $GLOBALS['config']['app']['cache_flag']. '_'.'api_role_'.md5(http_build_query($this->_param));
         $html = Cache::get($cach_name);
         if(empty($html) || $cache_time==0) {
             $where = [];
@@ -668,7 +668,7 @@ class Provide extends Base
         }
 
         $cache_time = intval($GLOBALS['config']['api']['website']['cachetime']);
-        $cach_name = 'api_website_'.md5(http_build_query($this->_param));
+        $cach_name = $GLOBALS['config']['app']['cache_flag']. '_'.'api_website_'.md5(http_build_query($this->_param));
         $html = Cache::get($cach_name);
         if(empty($html) || $cache_time==0) {
             $where = [];

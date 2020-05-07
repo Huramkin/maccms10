@@ -340,7 +340,7 @@ class Actor extends Base {
             return ['code'=>1001,'msg'=>'参数错误'];
         }
         $data_cache = false;
-        $key = 'actor_detail_'.$where['actor_id'][1].'_'.$where['actor_en'][1];
+        $key = $GLOBALS['config']['app']['cache_flag']. '_'. 'actor_detail_'.$where['actor_id'][1].'_'.$where['actor_en'][1];
         if($where['actor_id'][0]=='eq' || $where['actor_en'][0]=='eq'){
             $data_cache = true;
         }

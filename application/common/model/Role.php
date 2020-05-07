@@ -278,7 +278,7 @@ class Role extends Base {
             return ['code'=>1001,'msg'=>'参数错误'];
         }
         $data_cache = false;
-        $key = 'role_detail_'.$where['role_id'][1].'_'.$where['role_en'][1];
+        $key = $GLOBALS['config']['app']['cache_flag']. '_'. 'role_detail_'.$where['role_id'][1].'_'.$where['role_en'][1];
         if($where['role_id'][0]=='eq' || $where['role_en'][0]=='eq'){
             $data_cache = true;
         }

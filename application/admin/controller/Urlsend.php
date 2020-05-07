@@ -35,8 +35,10 @@ class Urlsend extends Base
         $urlsend_config = $GLOBALS['config']['urlsend'];
         $this->assign('config',$urlsend_config);
 
-        $urlsend_break_baidu_push = Cache::get('urlsend_break_baidu_push');
-        $urlsend_break_baidu_bear = Cache::get('urlsend_break_baidu_bear');
+        $key = $GLOBALS['config']['app']['cache_flag']. '_'.'urlsend_break_baidu_push';
+        $urlsend_break_baidu_push = Cache::get($key);
+        $key = $GLOBALS['config']['app']['cache_flag']. '_'.'urlsend_break_baidu_bear';
+        $urlsend_break_baidu_bear = Cache::get($key);
 
         $this->assign('urlsend_break_baidu_push',$urlsend_break_baidu_push);
         $this->assign('urlsend_break_baidu_bear',$urlsend_break_baidu_bear);
@@ -77,7 +79,7 @@ class Urlsend extends Base
 
         $today = strtotime(date('Y-m-d'));
         $where = [];
-        $this->_cache_name = 'urlsend_cach_'.$mid.'_'.$ac2;
+        $this->_cache_name = $GLOBALS['config']['app']['cache_flag']. '_'.'urlsend_cach_'.$mid.'_'.$ac2;
         $data = Cache::get($this->_cache_name);
         $col = '';
         switch($mid)
@@ -216,7 +218,8 @@ class Urlsend extends Base
     public function baidu_push()
     {
         $res = $this->data();
-        Cache::set('urlsend_break_baidu_push', url('urlsend/push').'?'. http_build_query($this->_param) );
+        $key = $GLOBALS['config']['app']['cache_flag']. '_'.'urlsend_break_baidu_push';
+        Cache::set($key, url('urlsend/push').'?'. http_build_query($this->_param) );
 
 
         if (!empty($res['urls'])) {
@@ -264,7 +267,8 @@ class Urlsend extends Base
     public function baidu_bear()
     {
         $res = $this->data();
-        Cache::set('urlsend_break_baidu_bear', url('urlsend/push').'?'. http_build_query($this->_param) );
+        $key = $GLOBALS['config']['app']['cache_flag']. '_'.'urlsend_break_baidu_bear';
+        Cache::set($key, url('urlsend/push').'?'. http_build_query($this->_param) );
 
         if(!empty($res['urls'])){
             $type = $this->_param['type']; //realtime实时, batch历史

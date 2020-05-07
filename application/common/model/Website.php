@@ -412,7 +412,7 @@ class Website extends Base {
             return ['code'=>1001,'msg'=>'参数错误'];
         }
         $data_cache = false;
-        $key = 'website_detail_'.$where['website_id'][1].'_'.$where['website_en'][1];
+        $key = $GLOBALS['config']['app']['cache_flag']. '_'.'website_detail_'.$where['website_id'][1].'_'.$where['website_en'][1];
         if($where['website_id'][0]=='eq' || $where['website_en'][0]=='eq'){
             $data_cache = true;
         }

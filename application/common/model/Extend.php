@@ -8,7 +8,7 @@ class Extend extends Base {
 
     public function dataCount()
     {
-        $key = 'data_count';
+        $key = $GLOBALS['config']['app']['cache_flag']. '_'.'data_count';
         $data = Cache::get($key);
         if(empty($data)){
             $totay = strtotime(date('Y-m-d'));

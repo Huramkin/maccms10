@@ -387,7 +387,7 @@ class Art extends Base {
             return ['code'=>1001,'msg'=>'参数错误'];
         }
         $data_cache = false;
-        $key = 'art_detail_'.$where['art_id'][1].'_'.$where['art_en'][1];
+        $key = $GLOBALS['config']['app']['cache_flag']. '_'.'art_detail_'.$where['art_id'][1].'_'.$where['art_en'][1];
         if($where['art_id'][0]=='eq' || $where['art_en'][0]=='eq'){
             $data_cache = true;
         }

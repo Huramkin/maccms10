@@ -729,7 +729,7 @@ function mac_parse_sql($sql='',$limit=0,$prefix=[])
 
 function mac_interface_type()
 {
-    $key = 'interface_type';
+    $key = $GLOBALS['config']['app']['cache_flag']. '_'. 'interface_type';
     $data = think\Cache::get($key);
     if(empty($data)){
         $config = config('maccms.interface');

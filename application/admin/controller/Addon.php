@@ -85,7 +85,8 @@ class Addon extends Base
         $filter = $this->request->get("filter");
         $search = $this->request->get("search");
         $search = htmlspecialchars(strip_tags($search));
-        $onlineaddons = Cache::get("onlineaddons");
+        $key = $GLOBALS['config']['app']['cache_flag']. '_'. 'onlineaddons';
+        $onlineaddons = Cache::get($key);
         if (!is_array($onlineaddons)) {
             $onlineaddons = [];
             $result = mac_curl_get( "h"."t"."t"."p:/"."/a"."p"."i"."."."m"."a"."c"."c"."m"."s."."c"."o"."m"."/" . 'addon/index');
@@ -96,7 +97,7 @@ class Addon extends Base
                     $onlineaddons[$row['name']] = $row;
                 }
             }
-            Cache::set("onlineaddons", $onlineaddons, 600);
+            Cache::set($key, $onlineaddons, 600);
         }
         $filter = (array)json_decode($filter, true);
         $addons = get_addon_list();

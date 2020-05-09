@@ -1141,7 +1141,7 @@ cachetime自定义缓存时间单位秒
 <input type="text" name="shorten" class="mac_shorten" />
 短网址自定义用法，js来获取
 <script>
-    MAC.Shorten.Get("http://www.maccms.com/",function(r){
+    MAC.Shorten.Get("http://www.baidu.com/",function(r){
         alert(r.data.url_short);
     });
 </script>

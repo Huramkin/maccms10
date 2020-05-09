@@ -43,7 +43,7 @@ class Init
             }
         }
 
-        define('MAC_URL','http://www.maccms.com/');
+        define('MAC_URL','http://www.maccms.la/');
         define('MAC_NAME','苹果CMS');
         define('MAC_PATH', $config['site']['install_dir'] .'');
         define('MAC_MOB', $TMP_ISWAP);
@@ -94,7 +94,7 @@ class Init
         config('cache.password',$config['app']['cache_password']);
         if($config['app']['cache_type'] != 'file'){
             $opt = config('cache');
-            Cache::reset_init($opt);
+            Cache::$handler = null;
         }
 
         $GLOBALS['config'] = $config;

@@ -7,7 +7,7 @@ class Addon extends Base {
 
     public function onlineData($page=1)
     {
-        $html = mac_curl_get('http://api.maccms.com/store/?page=' . $page);
+        $html = mac_curl_get( base64_decode('aHR0cDovL2FwaS5tYWNjbXMubGEv').'store/?page=' . $page);
         $json = json_decode($html, true);
         if (!$json) {
             return ['code' => 1001, 'msg' => '获取数据失败'];

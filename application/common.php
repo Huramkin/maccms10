@@ -1,11 +1,9 @@
 <?php
 /*
-'软件名称：苹果CMS
-'开发作者：MagicBlack  QQ：479025  官方网站：http://www.maccms.com/
+'软件名称：苹果CMS  官方网站：http://www.maccms.la/  源码库：https://github.com/magicblack
 '--------------------------------------------------------
-'适用本程序需遵循 CC BY-ND 许可协议
-'这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和使用；
-'不允许对程序代码以任何形式任何目的的再发布。
+'Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
+'遵循Apache2开源协议发布，并提供免费使用。
 '--------------------------------------------------------
 */
 error_reporting(E_ERROR | E_PARSE );
@@ -833,7 +831,7 @@ function mac_rep_pse_syn($psearr,$txt)
 }
 
 function mac_get_tag($title,$content){
-    $url ='http://api.maccms.com/keyword/index/txt/'.rawurlencode($title).rawurlencode(mac_substring(strip_tags($content),200));
+    $url = base64_decode('aHR0cDovL2FwaS5tYWNjbXMuY29t').'/keyword/index/txt/'.rawurlencode($title).rawurlencode(mac_substring(strip_tags($content),200));
     $data = mac_curl_get($url);
 	$json = @json_decode($data,true);
 	if($json){
